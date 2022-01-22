@@ -4,6 +4,8 @@ import com.ishan.simpleurlshortener.services.UrlShortenerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/u")
@@ -17,8 +19,8 @@ public class UrlShortenerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String shortenUrl(@RequestBody String url) {
-        return urlShortenerService.getShortenUrl(url);
+    public String shortenUrl(@RequestBody String url, HttpServletRequest request) {
+        return urlShortenerService.getShortenUrl(url, request);
     }
 
 

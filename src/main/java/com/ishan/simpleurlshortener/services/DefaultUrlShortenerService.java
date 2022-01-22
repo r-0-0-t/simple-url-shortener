@@ -1,7 +1,9 @@
 package com.ishan.simpleurlshortener.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,18 +16,22 @@ public class DefaultUrlShortenerService implements UrlShortenerService {
     private Map<String, String> shortUrls = new HashMap<>();
 
     @Override
-    public String getShortenUrl(String url) {
+    public String getShortenUrl(String url, HttpServletRequest request) {
         String hash = getHash(url);
-        String shortUrl = hash.substring(0, 7);
-        while(shortUrls.containsKey(shortUrl)) {
-            if(url.equals(shortUrls.get(shortUrl))) {
-                return shortUrl;
+        String shortUrlHash = hash.substring(0, 7);
+        while(shortUrls.containsKey(shortUrlHash)) {
+            if(url.equals(shortUrls.get(shortUrlHash))) {
+                return shortUrlHash;
             }
             hash = getHash(hash);
-            shortUrl = hash.substring(0,7);
+            shortUrlHash = hash.substring(0,7);
         }
-        shortUrls.put(shortUrl, url);
-        return shortUrl;
+        shortUrls.put(shortUrlHash, url);
+        String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
+                .replacePath(null)
+                .build()
+                .toUriString();
+        return baseUrl + request.getRequestURI() + '/' + shortUrlHash;
     }
 
     @Override
