@@ -14,5 +14,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Build with Maven
+      run: mvn clean install
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag simple-url-shortener:$(date +%s)
