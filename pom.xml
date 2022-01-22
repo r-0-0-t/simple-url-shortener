@@ -18,6 +18,12 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -49,6 +55,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>simple-url-shortener</finalName>
     </build>
 
 </project>
