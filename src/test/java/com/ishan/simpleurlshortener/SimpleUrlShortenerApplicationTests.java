@@ -2,7 +2,6 @@ package com.ishan.simpleurlshortener;
 
 import com.ishan.simpleurlshortener.constants.Constants;
 import com.ishan.simpleurlshortener.services.UrlShortenerService;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -75,7 +74,7 @@ class SimpleUrlShortenerApplicationTests {
         when(mockedRequest.getRequestURI()).thenReturn("/u");
     }
 
-    private @NotNull String getUrlWithBaseUrl(HttpServletRequest request) {
+    private String getUrlWithBaseUrl(HttpServletRequest request) {
         String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
                 .replacePath(null)
                 .build()
