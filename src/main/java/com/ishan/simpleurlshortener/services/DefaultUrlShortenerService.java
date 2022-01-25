@@ -1,5 +1,6 @@
 package com.ishan.simpleurlshortener.services;
 
+import com.ishan.simpleurlshortener.constants.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,35 +22,37 @@ public class DefaultUrlShortenerService implements UrlShortenerService {
     @Override
     public String getShortenUrl(String url, HttpServletRequest request) {
         if(isValidURL(url) == false) {
-            return "Url not valid";
+            return Constants.URL_NOT_VALID;
+        }
+        if(url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
         }
         String hash = getHash(url);
         String shortUrlHash = hash.substring(0, 7);
         while(shortUrls.containsKey(shortUrlHash)) {
             if(url.equals(shortUrls.get(shortUrlHash))) {
-                return getUrlWithBaseUrl(request, shortUrlHash);
+                return getUrlWithBaseUrl(request) + shortUrlHash;
             }
             hash = getHash(hash);
             shortUrlHash = hash.substring(0,7);
         }
         shortUrls.put(shortUrlHash, url);
-        return getUrlWithBaseUrl(request, shortUrlHash);
+        return getUrlWithBaseUrl(request) + shortUrlHash;
     }
 
-    private String getUrlWithBaseUrl(HttpServletRequest request, String shortUrlHash) {
+    private String getUrlWithBaseUrl(HttpServletRequest request) {
         String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
                 .replacePath(null)
                 .build()
                 .toUriString();
-        return baseUrl + request.getRequestURI() + '/' + shortUrlHash;
+        return baseUrl + request.getRequestURI() + '/';
     }
 
     @Override
     public String getLongUrl(String hash) {
         if(shortUrls.containsKey(hash)) return shortUrls.get(hash);
-        return "Url does not exist.";
+        return Constants.URL_DOES_NOT_EXIST;
     }
-
 
     private String getHash(String url)  {
         MessageDigest md = null;
